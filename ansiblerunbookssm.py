@@ -1,11 +1,17 @@
 import boto3
 import botocore
 import time
+from github import github 
 
 ec2client = boto3.resource('ec2')
 ssm_client = boto3.client('ssm')
 sns_client = boto3.client('sns')
 snsarn="arn:aws:sns:us-east-1:180634412322:LambdaSsmAnsible"
+
+username = 'Cnchinda'
+token = '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'
+
+login = requests.get('https://github.com/Cnchinda/AWS_ansible.git', auth=(username,token))
 
 def lambda_handler(event=None, context=None):
     #get the instance id from event
@@ -13,10 +19,11 @@ def lambda_handler(event=None, context=None):
     print(f'ec2_instanceID: {instance_id}')
     ec2instance = ec2client.Instance(instance_id)
     #Iterate over all tag values to get the tag value from key SSMAnsiblePlaybookName which should contain the playbookname
-    playbook = [tags['Value'] for tags in ec2instance.tags if tags['Key'] == 'SSMAnsiblePlaybookName']
+    #playbook = [tags['Value'] for tags in ec2instance.tags if tags['Key'] == 'SSMAnsiblePlaybookName']
     #Covert playbook into a string datatype
-    playbook =' '.join(map(str, playbook))
+    #playbook =' '.join(map(str, playbook))
     #Check to see if playbook tag exist, if not tag it'll
+    playbook = install_apache.yml
     if len(playbook) == 0:
         print(f'No SSMAnsiblePlaybookName Tag found on instance {instance_id}')
         return
@@ -24,7 +31,7 @@ def lambda_handler(event=None, context=None):
         #sleep 60 seconds. This allows for ec2 instance to be in appropriate state to accept a RunCommand
         time.sleep(60)
         #provides3 uri where the playbook is stored 
-        playbook_url = f"s3://learnings3buckettaz/{playbook}" 
+        playbook_url = https://github.com/Cnchinda/AWS_ansible.git/{playbook}" 
         params={
                 'playbookurl':[playbook_url],
                 'extravars':['SSM=True'],
